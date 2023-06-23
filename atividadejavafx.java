@@ -1,53 +1,66 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class LoginScreen extends Application {
+public class LoginApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Tela de Login");
+        primaryStage.setTitle("Login");
 
-        Label lblUsername = new Label("Usuário:");
-        TextField txtUsername = new TextField();
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Label lblPassword = new Label("Senha:");
-        TextField txtPassword = new TextField();
+        Text scenetitle = new Text("JavaFX Welcome!");
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+        grid.add(scenetitle, 0, 0, 2, 1);
 
-        Button btnLogin = new Button("Login");
-        btnLogin.setOnAction(e -> {
-            String username = txtUsername.getText();
-            String password = txtPassword.getText();
-            if (authenticate(username, password)) {
-                System.out.println("Login bem-sucedido!");
+        Label userNameLabel = new Label("User Name:");
+        grid.add(userNameLabel, 0, 1);
+
+        TextField userNameField = new TextField();
+        grid.add(userNameField, 1, 1);
+
+        Label passwordLabel = new Label("Password:");
+        grid.add(passwordLabel, 0, 2);
+
+        PasswordField passwordField = new PasswordField();
+        grid.add(passwordField, 1, 2);
+
+        Button loginButton = new Button("Sing in");
+        grid.add(loginButton, 1, 3);
+
+        Text actionTarget = new Text();
+        grid.add(actionTarget, 1, 4);
+
+        loginButton.setOnAction(e -> {
+            String username = userNameField.getText();
+            String password = passwordField.getText();
+            if (username.equals("admin") && password.equals("password")) {
+                actionTarget.setFill(javafx.scene.paint.Color.GREEN);
+                actionTarget.setText("Login successful");
             } else {
-                System.out.println("Login falhou. Tente novamente!");
+                actionTarget.setFill(javafx.scene.paint.Color.RED);
+                actionTarget.setText("Invalid username or password");
             }
         });
 
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(10));
-        gridPane.setHgap(5);
-        gridPane.setVgap(5);
-
-        gridPane.add(lblUsername, 0, 0);
-        gridPane.add(txtUsername, 1, 0);
-        gridPane.add(lblPassword, 0, 1);
-        gridPane.add(txtPassword, 1, 1);
-        gridPane.add(btnLogin, 1, 2);
-
-        Scene scene = new Scene(gridPane, 300, 150);
+        Scene scene = new Scene(grid, 300, 200);
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    private boolean authenticate(String username, String password) {
-        return username.equals("usuario") && password.equals("senha");
     }
 
     public static void main(String[] args) {
